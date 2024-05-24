@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btn {
+        @apply px-2 py-1 text-white bg-black rounded-lg;
+    }
+
+    .row {
+        @apply flex justify-center items-center;
+    }
+
+    .col {
+        @apply  flex flex-col justify-center items-center;
+    }
+}
