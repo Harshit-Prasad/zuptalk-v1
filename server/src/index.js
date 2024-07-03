@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { Server } from "socket.io";
 import { createServer } from "node:http";
+import { generateToken04 } from './zego/server-assistent.zego.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -13,9 +14,29 @@ app.use(express.json());
 app.use(cors());
 app.options('*', cors());
 
+app.post('/api/zego-auth-token', (req, res) => {
+    try {
+        const userId = req.body.userId;
+        const time = 3600;
+
+        const appId = process.env.ZEGO_APP_ID
+        const secret = process.env.ZEGO_SERVER_SECRET
+
+        console.log(req);
+
+        const token = generateToken04(Number(appId), userId, secret, time);
+
+        console.log('>>>', token);
+
+        return res.json(token)
+    } catch (error) {
+        console.log(error);
+        return res.send({ error: true })
+    }
+})
+
 const server = createServer(app);
 
-// Socket io init
 const io = new Server(server, {
     pingTimeout: 60000,
     cors: {
@@ -29,6 +50,7 @@ server.listen(PORT, () => {
 });
 
 io.on('connection', (socket) => {
+    console.log(socket.id);
     socket.on('user-joined', ({ roomId }) => {
         socket.join(socket.id);
         socket.join(roomId)
@@ -39,16 +61,4 @@ io.on('connection', (socket) => {
     socket.on('local-user-joined', ({ id, roomId }) => {
         socket.in(roomId).emit('local-user-joined', { id })
     });
-
-    socket.on("call-remote-user", ({ from, to, offer }) => {
-        io.to(to).emit("remote-user-calling", { offer });
-    });
-
-    socket.on('call-answered', ({ from, to, answer }) => {
-        io.to(to).emit('call-answered', { answer })
-    })
-
-    socket.on('incoming-ice-candidate', ({ from, to, ic }) => {
-        io.to(to).emit('add-ice-candidate', { ic })
-    })
 })
