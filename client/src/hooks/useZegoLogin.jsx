@@ -5,17 +5,23 @@ export default function useZegoLogin({ roomID, token, userID, userName }) {
     const { zg } = useZegoExpressEngine()
     const [isLoginSuccess, setIsLoginSuccess] = useState(false)
 
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    console.log(roomID);
+
     useEffect(() => {
 
-        if (token) {
+        if (token && roomID && userID && userName) {
             (async () => {
                 const result = await zg.loginRoom(roomID, token, { userID, userName }, { userUpdate: true });
+
+                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+                console.log(result);
 
                 setIsLoginSuccess(result)
             })();
         }
 
-    }, [token]);
+    }, [roomID, token, userID, userName]);
 
     return { isLoginSuccess }
 }

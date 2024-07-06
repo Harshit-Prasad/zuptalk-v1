@@ -9,15 +9,13 @@ export default function useSetupStream({ isLoginSuccess, userId: streamId }) {
 
         if (isLoginSuccess) {
             (async () => {
-                option = {
+                const option = {
                     camera: {
                         video: false,
                         audio: true
                     }
                 }
                 const localStream = await zg.createZegoStream(option);
-
-                localStream.playAudio()
 
                 zg.startPublishingStream(streamId, localStream)
 

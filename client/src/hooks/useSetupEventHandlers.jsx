@@ -4,14 +4,14 @@ import { useZegoExpressEngine } from '../context/ZegoExpressEngine'
 export default function useSetupEventHandlers({ remoteAudioStreamRef }) {
 
   const { zg } = useZegoExpressEngine();
+  // const [currentUserId, setCurrentUserId] = useState('');
+  // const [currentUserName, setCurrentUserName] = useState('')
 
   useEffect(() => {
 
     zg.on('roomStateUpdate', (roomID, state, errorCode, extendedData) => {
 
-      console.log('>>> roomStateUpdate <<<');
-
-      console.log(state);
+      console.log('>>> roomStateUpdate <<<', state);
 
       if (state == 'DISCONNECTED') {
 
@@ -27,23 +27,23 @@ export default function useSetupEventHandlers({ remoteAudioStreamRef }) {
     });
 
     zg.on('roomUserUpdate', (roomID, updateType, userList) => {
-      console.log('>>> roomUserUpdate <<<');
-
-      console.log(userList)
+      console.log('>>> roomUserUpdate <<<', userList);
     });
 
     zg.on('roomStreamUpdate', async (roomID, updateType, streamList, extendedData) => {
-      console.log('>>> roomStreamUpdate <<<');
+      console.log('>>> roomStreamUpdate <<<', remoteAudioStreamRef);
 
-      console.log(roomID, updateType, streamList, extendedData);
+      const [stream] = streamList;
 
-      // if (remoteAudioStreamRef?.current) {
-      //   const remoteStream = await zg.startPlayingStream(streamID);
-      //   remoteAudioStreamRef.current.srcObject = remoteStream;
-      // }
+      const remoteStream = await zg.startPlayingStream(stream.streamID);
+      remoteAudioStreamRef.current.srcObject = remoteStream;
     });
 
-  }, [zg, remoteAudioStreamRef?.current])
+    zg.on('getPublishingStreamQuality', (...args) => {
+      console.log('getPublishingStreamQuality', args);
+    })
+
+  }, [])
 
   return {}
 }

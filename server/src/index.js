@@ -22,8 +22,6 @@ app.post('/api/zego-auth-token', (req, res) => {
         const appId = process.env.ZEGO_APP_ID
         const secret = process.env.ZEGO_SERVER_SECRET
 
-        console.log(req);
-
         const token = generateToken04(Number(appId), userId, secret, time);
 
         console.log('>>>', token);

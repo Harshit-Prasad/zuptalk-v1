@@ -17,8 +17,8 @@ export default function Room() {
     const { token } = useGetAuthToken(userId);
 
     const { isLoginSuccess } = useZegoLogin({
-        roomId: params.id,
-        userId: userId,
+        roomID: params.id,
+        userID: userId,
         userName: userName,
         token: token
     });

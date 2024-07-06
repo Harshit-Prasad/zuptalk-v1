@@ -14,10 +14,13 @@ export default function useGetAuthToken(userId) {
 
                 const response = await axios.post(url, data)
 
+                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+                console.log(response);
+
                 if (response.data?.error) {
                     throw 'Something went wrong!'
                 } else {
-                    setToken(t)
+                    setToken(response.data)
                 }
             } catch (error) {
                 console.log(error.message);
