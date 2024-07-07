@@ -76,7 +76,7 @@ export default function Room() {
                 <h2>Remote User: {remoteUserId}</h2>
             </div>
             <div>
-                <audio ref={remoteAudioStreamRef} id='remote-stream'></audio>
+                <audio autoPlay ref={remoteAudioStreamRef} id='remote-stream'></audio>
             </div>
         </>
     )
